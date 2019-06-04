@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: pickledump
+# key: pickledump
+# --
+with open(${1: filepath}, "wb") as f:
+     pickle.dump(${2: obj}, f)

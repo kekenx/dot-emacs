@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: if1
+# key: if1
+# for one liner if in c++
+# --
+
+if (${1:condition}) ${2: returnValue};

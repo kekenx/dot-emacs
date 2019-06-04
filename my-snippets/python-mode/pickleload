@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: pickleload
+# key: pickleload
+# --
+with open(${1: filepath}, "rb") as f:
+     ${2: variable} = pickle.load(f)
