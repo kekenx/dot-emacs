@@ -3,7 +3,7 @@
 ;;; python configuration --- ...
 
 ;;; Code:
-(ensure-package-installed 'python-mode 'jedi 'py-yapf)
+(ensure-package-installed 'python-mode 'jedi)
 
 ;; (require 'python-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.py$'" . python-mode))
@@ -18,6 +18,4 @@
 ;; (add-hook 'python-mode-hook' 'py-yapf-enable-on-save)
 
 
-(require 'py-yapf)
-(add-hook 'python-mode-hook 'py-yapf-enable-on-save)
 ;;; my-python.el ends here
