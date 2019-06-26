@@ -15,7 +15,7 @@
 
 (setq load-path
       (append '(
-		"~/.emacs.d/my-confs"
+		"~/emacs/my-confs"
 		) load-path))
 
 (load-theme 'manoj-dark t)
@@ -25,7 +25,7 @@
 		   (load-file (concat (file-name-as-directory dir) f)))
 		 ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
-(load-directory "~/.emacs.d/my-confs/")
+(load-directory "~/emacs/my-confs/")
 
 ;; added by system
 (custom-set-variables
