@@ -3,6 +3,9 @@
 ;;; Emacs general setup --- ...
 
 ;;; Code:
+
+(prefer-coding-system 'utf-8)
+(setq inhibit-startup-screen t)
 ;; define function to check if required packages are installed
 (defun ensure-package-installed (&rest packages)
   (mapcar
@@ -49,7 +52,7 @@
 ;; enalbe which-function-mode; mode that displays which function currently working on
 (which-function-mode 1)
 
-;; set eshell to C-t by default
+;; set eshell to C-z by default
 (global-set-key (kbd "C-z") 'eshell)
 
 ;; compile with makefile with C-c C-c

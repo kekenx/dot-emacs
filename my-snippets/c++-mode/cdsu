@@ -1,0 +1,40 @@
+# -*- mode: snippet -*-
+# name: cdsu
+# key: cdsu
+# For unionfind for competitive programming
+# --
+
+class DSU {
+private:
+  std::vector<int> rank, p, size;
+public:
+  DSU(int n): rank(n, 0), p(n), size(n, 1) {
+    std::iota(p.begin(), p.end(), 0);
+  }
+
+  int findRep(int x) {
+    if (p[x] != x) {
+      p[x] = findRep(p[x]);
+    }
+    return p[x];
+  }
+
+  void unite(int x, int y) {
+    int p1 = findRep(x), p2 = findRep(y);
+    if (p1 == p2) return;
+    if (rank[p1] < rank[p2]) std::swap(p1, p2);
+    
+    if (rank[p1] == rank[p2]) rank[p1]++;
+    p[p2] = p1;
+    size[p1] += size[p2];
+  }
+
+  int getSize(int x) {
+    int xRep = findRep(x);
+    return p[xRep];
+  }
+
+  bool isSame(int x, int y) {
+    return findRep(x) == findRep(y);
+  }
+};
