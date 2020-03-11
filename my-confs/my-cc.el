@@ -15,5 +15,5 @@
          ("\\.hh$"   . c++-mode)
          )
        auto-mode-alist))
-(add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11")))
+(add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++14")))
 ;;; my-cc.el ends here

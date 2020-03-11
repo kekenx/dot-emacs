@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: cmodint
-# key: cmodint
-# For modint library for competitive programming
+# name: cbicoef
+# key: cbicoef
+# For bicoef library for competitive programming
 # --
 template<typename T, T mod>
 class Modint {
@@ -69,6 +69,24 @@ public:
       }
     }
     return Modint(a);
+  }
+};
+
+template<class T>
+class BiCoef {
+private:
+  vector<T> fact, ifact;
+public:
+  BiCoef(int n) {init_table(n);}
+
+  void init_table(int n) {
+    fact.assign(n + 1, 1), ifact.assign(n + 1, 1);
+    for (int i = 2; i < n + 1; ++i) fact[i] = fact[i - 1] * i;
+    ifact[n] = fact[n].inverse();
+    for (int i = n; i > 2; --i) ifact[i - 1] = ifact[i] * i; 
+  }
+  T comb(int n, int r) {
+    return fact[n] * (ifact[r] * ifact[n - r]);
   }
 };
 
