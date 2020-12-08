@@ -3,23 +3,20 @@
 ;;; python configuration --- ...
 
 ;;; Code:
-(ensure-package-installed 'rust-mode 'flycheck-rust 'racer)
+(ensure-package-installed 'rust-mode 'flycheck-rust 'company)
 
-;;; Add path to the compiler, racer and rustfmt
+;; (use-package rust-mode)
+;; (add-to-list 'exec-path(expand-file-name "~/.cargo/bin/"))
+;; (add-to-list 'auto-mode-alist '("\\.rs\\'"  . rust-mode))
+;; (add-hook 'rust-mode-hook #'racer-mode)
+;; (add-hook 'racer-mode-hook #'eldoc-mode)
+;;; racerやrustfmt、コンパイラにパスを通す
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 (add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
-;;; auto format on save
+;;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
 
-(add-hook 'rust-mode-hook (lambda ()
-                            (racer-mode)
-                            (flycheck-rust-setup)))
-;;; eldoc suppor on racer
-(add-hook 'racer-mode-hook #'eldoc-mode)
-;;; racer auto-complete
-(add-hook 'racer-mode-hook (lambda ()
-                             (company-mode)
-                             (set (make-variable-buffer-local 'company-idle-delay) 0.1)
-                             (set (make-variable-buffer-local 'company-minimum-prefix-length) 0)))
+(add-hook 'rust-mode-hook #'company-mode)
 
-;;; my-rust.el ends here
+;; my-rust.el ends here

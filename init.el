@@ -19,6 +19,7 @@
 		) load-path))
 
 (load-theme 'manoj-dark t)
+(require 'cl)
 
 (defun load-directory (dir)
   (let ((load-it (lambda (f)
