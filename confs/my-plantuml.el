@@ -12,7 +12,7 @@
   ;; for java option if neccessary
   ;; (setq plantuml-output-type "png")
   (setq plantuml-java-options "")
-  (setq tab-width 4)
+  (setq tab-width 0)
   ;; (setq plantuml-default-exec-mode 'executable)
   (setq plantuml-options "-charset UTF-8"))
 

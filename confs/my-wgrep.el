@@ -3,7 +3,8 @@
 ;;; wgrep --- wgrep
 
 ;;; Code:
-(ensure-package-installed 'wgrep)
 
-(require 'wgrep nil t)
+(use-package wgrep
+  :ensure t)
+
 ;;; my-wgrep.el ends here

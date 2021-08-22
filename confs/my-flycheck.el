@@ -3,7 +3,8 @@
 ;;; flycheck configuration file --- ...
 
 ;;; Code:
-(ensure-package-installed 'flycheck)
-;; enable flycheck for any major-mode specified
-(add-hook 'after-init-hook #'global-flycheck-mode)
+
+(use-package flycheck
+  :ensure t)
+
 ;;; my-flycheck.el ends here

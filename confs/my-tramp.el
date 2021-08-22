@@ -3,6 +3,6 @@
 ;;; only the tramp configuration --- ...
 
 ;;; Code:
-(ensure-package-installed 'docker-tramp)
-(require 'docker-tramp-compat)
+(use-package docker-tramp
+  :ensure t)
 ;;; my-tramp.el ends here

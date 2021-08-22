@@ -13,35 +13,34 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-(setq load-path
-      (append '(
-		"~/emacs/my-confs"
-		) load-path))
+(unless package-archive-contents (package-refresh-contents))
+;; define function to check if required packages are installed
+(defun ensure-package-installed (&rest packages)
+  (mapcar
+   (lambda (package)
+     (if (package-installed-p package)
+	 nil
+       (if (y-or-n-p (format "Package %s is missing. Install it?" package))
+	   (package-install package)
+	 package)))
+   packages))
 
-(load-theme 'manoj-dark t)
-(require 'cl)
+(ensure-package-installed 'use-package)
+(require 'use-package)
 
 (defun load-directory (dir)
   (let ((load-it (lambda (f)
 		   (load-file (concat (file-name-as-directory dir) f)))
 		 ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
-(load-directory "~/emacs/my-confs/")
+(load-directory "~/emacs/confs/")
 
-;; added by system
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (terraform-mode flycheck-plantuml plantuml-mode csharp-mode go-mode yaml-mode yasnippet-snippets rust-mode helm-ag ag helm))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Use different file for Custom.
+(setq custom-file (locate-user-emacs-file "custom.el"))
+
+;; Create custom.el if not exist
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(load custom-file)
 
 ;;; init.el ends here

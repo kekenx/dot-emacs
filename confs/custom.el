@@ -5,18 +5,8 @@
 ;;; Code:
 
 (prefer-coding-system 'utf-8)
-(setq inhibit-startup-screen t)
-;; define function to check if required packages are installed
-(defun ensure-package-installed (&rest packages)
-  (mapcar
-   (lambda (package)
-     (if (package-installed-p package)
-	 nil
-       (if (y-or-n-p (format "Package %s is missing. Install it?" package))
-	   (package-install package)
-	 package)))
-   packages))
 
+(setq inhibit-startup-screen t)
 ;; split windows, move between windows  by C-t.
 (defun split-window-vertically-n (num_wins)
   (interactive "p")
@@ -58,4 +48,6 @@
 ;; compile with makefile with C-c C-c
 (global-unset-key (kbd "C-c C-c"))
 (global-set-key (kbd "C-c o") 'compile)
+
+(load-theme 'manoj-dark t)
 ;; custom.el ends here

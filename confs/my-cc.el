@@ -3,6 +3,7 @@
 ;;; ...
 
 ;;; Code:
+
 (setq auto-mode-alist
       (append
        '(
@@ -16,4 +17,5 @@
          )
        auto-mode-alist))
 (add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++14")))
+
 ;;; my-cc.el ends here
