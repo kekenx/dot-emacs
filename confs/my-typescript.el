@@ -1,27 +1,43 @@
 ;;; my-typescript.el --- typescript support
 ;;; Commentary:
 ;;; Code:
+(use-package typescript-mode
+  :ensure t
+  :config
+  (setq typescript-indent-level 2)
+  (add-hook 'typescript-mode-hook
+          (lambda ()
+            (interactive)
+            (mmm-mode)
+            )))
 
-(add-to-list 'auto-mode-alist '("\\.[jt]sx\\'" . typescript-mode))
-(defun setup-tide-mode ()
-  "Setup function for tide."
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
+(use-package mmm-mode
+  :ensure t
+  :commands mmm-mode
+  :mode (("\\.tsx\\'" . typescript-mode))
+  :config
+  (setq mmm-global-mode t)
+  (setq mmm-submode-decoration-level 0)
+  (mmm-add-classes
+   '((mmm-jsx-mode
+      :submode web-mode
+      :face mmm-code-submode-face
+      :front "\\(return\s\\|n\s\\|(\n\s*\\)<"
+      :front-offset -1
+      :back ">\n?\s*)\n}\n"
+      :back-offset 1
+      )))
+  (mmm-add-mode-ext-class 'typescript-mode nil 'mmm-jsx-mode)
 
-(setq company-tooltip-align-annotations t)
 
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-(add-hook 'typescript-mode-hook 'prettier-js-mode)
-(setq prettier-js-args '(
-  "--trailing-comma" "none"
-  "--bracket-spacing" "true"
-  "--single-quote" "true"
-  "--jsx-single-quote" "true"
-  "--jsx-bracket-same-line" "true"
-  "--print-width" "100"))
+  (defun mmm-reapply ()
+    (mmm-mode)
+    (mmm-mode))
+
+  (add-hook 'after-save-hook
+            (lambda ()
+              (when (string-match-p "\\.tsx?" buffer-file-name)
+                (mmm-reapply)
+                )))
+  )
 ;;; my-typescript.el ends here~
