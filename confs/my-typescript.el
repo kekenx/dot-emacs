@@ -1,5 +1,5 @@
 ;;; my-typescript.el --- typescript support
-;;; Commentary:
+;;; Commentary: reference https://qiita.com/nuy/items/ebcb25ad14f02ab72790
 ;;; Code:
 (use-package typescript-mode
   :ensure t
