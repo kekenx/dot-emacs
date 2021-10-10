@@ -1,6 +1,6 @@
 ;;; my-rust.el --- rust configuration
-;;; Commentary:
-;;; python configuration --- ...
+;;; Commentary: reference https://keens.github.io/blog/2020/12/01/rustnokankyoukouchiku_emacs_/
+;;; rust configuration --- ...
 
 ;;; Code:
 (add-to-list 'exec-path (expand-file-name "~/tools"))
