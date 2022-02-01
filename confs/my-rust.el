@@ -16,7 +16,9 @@
 
 (use-package cargo
   :ensure t
-  :hook (rust-mode . cargo-minor-mode))
+  :hook (rust-mode . cargo-minor-mode)
+  :bind ("C-c C-c C-p" . cargo-process-clippy)
+  :config (setq cargo-process--command-clippy "clippy"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; #lsp
