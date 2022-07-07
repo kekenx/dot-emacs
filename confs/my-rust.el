@@ -17,7 +17,11 @@
 (use-package cargo
   :ensure t
   :hook (rust-mode . cargo-minor-mode)
-  :bind ("C-c C-c C-p" . cargo-process-clippy)
+  ;; :init
+  ;; (bind-keys :map mode-specific-map
+  ;; 	     ("C-c C-p" . cargo-process-clippy))
+  :bind (:map rust-mode-map
+	      ("C-c C-c C-p" . cargo-process-clippy))
   :config (setq cargo-process--command-clippy "clippy"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
