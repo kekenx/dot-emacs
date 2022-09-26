@@ -8,6 +8,11 @@
   :mode ("\\.org\\'")
   :init
   (setq org-todo-keywords
-	'((sequence "TODO" "SOMEDAY" "WAITING" "DOING" "|" "DONE"))))
+	'((sequence "TODO(t)" "SOMEDAY(s)" "WAITING(w)" "IN PROGRESS(i)" "|" "DONE(d)")))
+  (setq org-enforce-todo-dependencies t)
+  ;;; for executing inline code.
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t))))
 
 ;;; my-org.el ends here
