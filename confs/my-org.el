@@ -13,6 +13,11 @@
   ;;; for executing inline code.
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t))))
+   '(
+     (python . t)
+     (lua . t)
+     )
+   )
+  )
 
 ;;; my-org.el ends here
