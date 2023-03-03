@@ -33,7 +33,7 @@
 		   (load-file (concat (file-name-as-directory dir) f)))
 		 ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
-(load-directory "~/emacs/confs/")
+(load-directory "~/dot-emacs/confs/")
 
 ;; Use different file for Custom.
 (setq custom-file (locate-user-emacs-file "custom.el"))
