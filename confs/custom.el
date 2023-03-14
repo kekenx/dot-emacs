@@ -28,9 +28,7 @@
 (defun other-window-or-split ()
   (interactive)
   (when (one-window-p)
-    (if (>= (window-body-width) 270)
-        (split-window-horizontally-n 3)
-      (split-window-horizontally)))
+    (split-window-horizontally-n 3))
   (other-window 1))
 
 (global-set-key (kbd "C-t") 'other-window-or-split)
