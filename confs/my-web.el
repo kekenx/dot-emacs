@@ -5,7 +5,7 @@
   :ensure t
   :mode (("\\.[tj]sx?\\'" . web-mode))
   :config
-  (setq web-mode-markup-indet-offset 2)
+  (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   )
