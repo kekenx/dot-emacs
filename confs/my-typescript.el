@@ -5,12 +5,12 @@
   :ensure t
   :mode (("\\.ts\\'" . typescript-mode))
   :config
-  (setq typescript-indent-level2))
+  (setq typescript-indent-level 2))
 
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook (typescript-mode . lsp-deferred)
-  )
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :commands (lsp lsp-deferred)
+;;   :hook (typescript-mode . lsp-deferred)
+;;   )
 
 ;;; my-typescript.el ends here~
