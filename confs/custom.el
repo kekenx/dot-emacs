@@ -65,4 +65,5 @@
     (cl-callf color-saturate-name (face-foreground face) 15))))
 (add-hook 'emacs-startup-hook 'rainbow-delimiters-using-stronger-colors)
 (add-hook 'eshell-mode-hook (lambda() (company-mode 0)))
+(add-hook 'python-mode-hook (lambda() (company-mode 0)))
 ;; custom.el ends here
