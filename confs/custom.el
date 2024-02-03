@@ -66,4 +66,15 @@
 (add-hook 'emacs-startup-hook 'rainbow-delimiters-using-stronger-colors)
 (add-hook 'eshell-mode-hook (lambda() (company-mode 0)))
 (add-hook 'python-mode-hook (lambda() (company-mode 0)))
+
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank)
+)
+(global-set-key (kbd "C-c d") 'duplicate-line)
 ;; custom.el ends here
