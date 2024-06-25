@@ -22,7 +22,9 @@
   ;; 	     ("C-c C-p" . cargo-process-clippy))
   :bind (:map rust-mode-map
 	      ("C-c C-c C-p" . cargo-process-clippy))
-  :config (setq cargo-process--command-clippy "clippy"))
+  :config
+  (setq cargo-process--command-clippy "clippy")
+  (setq cargo-process--command-flags "--color never"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; #lsp
