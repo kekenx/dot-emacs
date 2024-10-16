@@ -77,4 +77,6 @@
   (yank)
 )
 (global-set-key (kbd "C-c d") 'duplicate-line)
+
+(menu-bar-mode 0)
 ;; custom.el ends here
