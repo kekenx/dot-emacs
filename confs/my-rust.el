@@ -11,8 +11,13 @@
 
 (use-package rust-mode
   :ensure t
+  ;; :hook
+  ;; (rust-mode . (lambda ()
+  ;;                (add-hook 'before-save-hook #'rust-format-buffer nil t))))
   :custom rust-format-on-save t)
-
+(add-hook 'rust-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)))
 
 (use-package cargo
   :ensure t
