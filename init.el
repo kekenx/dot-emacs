@@ -89,6 +89,11 @@
 (use-package vterm
   :ensure t)
 
+;; Reinstall transient from upstream to get the newest version
+(elpaca (transient :host github :repo "magit/transient"))
+;; Or, if you prefer ELPA/MELPA, ensure the archive is enabled and then:
+(elpaca transient)
+
 (use-package claude-code-ide
   :after transient
   :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el"))
