@@ -33,7 +33,6 @@
 		   (load-file (concat (file-name-as-directory dir) f)))
 		 ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
-(load-directory "~/dot-emacs/confs/")
 
 ;; Use different file for Custom.
 (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -91,11 +90,8 @@
 
 ;; Reinstall transient from upstream to get the newest version
 (elpaca (transient :host github :repo "magit/transient"))
-;; Or, if you prefer ELPA/MELPA, ensure the archive is enabled and then:
-(elpaca transient)
 
-(use-package claude-code-ide
-  :after transient
-  :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el"))
+;; Load configuration files from confs directory
+(load-directory "~/dot-emacs/confs/")
 
 ;;; init.el ends here
