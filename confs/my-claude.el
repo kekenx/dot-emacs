@@ -11,6 +11,7 @@
 
 (use-package claude-code-ide
   :after transient
+  :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
   :config
   ;; Command to refresh claude-code buffer display (fixes duplicate sections)
   (defun my-claude-refresh-display ()
