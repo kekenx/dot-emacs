@@ -11,6 +11,15 @@
 
 (require 'package)
 
+;; Allow package.el to upgrade BUILT-IN packages from an archive.  This is
+;; required on Emacs 30+, where `transient' ships built-in (v0.8.x) but
+;; claude-code-ide/magit need a newer MELPA transient (>= 0.9.0).  Without
+;; this, `package-install' refuses to replace the built-in copy, the old one
+;; loads, and stray newer bits collide ("Invalid function: static-when" /
+;; "transient--init-suffix-key is already defined as something else than a
+;; generic function").  (Available since Emacs 29.1.)
+(setq package-install-upgrade-built-in t)
+
 ;; Package archives.  gnu + nongnu provide core/built-in-adjacent packages,
 ;; melpa provides the bulk of third-party packages.
 (setq package-archives
@@ -41,15 +50,18 @@
 ;; (otherwise transient loads as source and errors with
 ;; "Invalid function: static-when").  Installing compat first guarantees the
 ;; correct order on a fresh machine.
-(unless (package-installed-p 'compat)
+;; compat >= 31 provides the `static-when' macro that modern transient uses.
+;; Version-gate so an older cached compat actually gets upgraded.
+(unless (package-installed-p 'compat '(31))
   (package-install 'compat))
-;; Load compat eagerly so its compile-time-only macros (notably `static-when',
-;; which transient uses) are ALSO defined at runtime.  This way transient works
-;; even if it is ever loaded as source instead of a compat-aware .elc.  NOTE:
-;; this requires a recent compat (>= 31, where static-when lives) -- on a box
-;; with an older cached compat, run `package-upgrade'/reinstall compat once.
+;; Load compat eagerly so its compile-time-only macros (notably `static-when')
+;; are also defined at runtime -- belt-and-suspenders if transient ever loads
+;; as source instead of a compat-aware .elc.
 (require 'compat)
-(unless (package-installed-p 'transient)
+;; Version-gate transient on 0.9.0 so the built-in 0.8.x triggers an upgrade
+;; to the MELPA version that claude-code-ide requires (see the built-in
+;; upgrade note above).
+(unless (package-installed-p 'transient '(0 9 0))
   (package-install 'transient))
 
 ;; Keep Customize's auto-generated settings in their own file, out of the repo.
