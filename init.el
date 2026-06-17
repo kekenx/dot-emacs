@@ -1,97 +1,55 @@
-;;; init.el --- Initialization file for Emacs
+;;; init.el --- Initialization file for Emacs -*- lexical-binding: t; -*-
 ;;; Commentary:
-;;; Emacs Startup File --- initialization for Emacs
+;;; Emacs startup file.  Bootstraps the built-in package.el manager and
+;;; use-package, then loads per-feature configuration from ~/dot-emacs/confs/.
+;;;
+;;; Targets Emacs 29 and 30.  A single package manager (package.el) is used
+;;; on purpose: running both package.el and Elpaca at once previously caused
+;;; duplicate, version-skewed copies of packages on the load-path.
 
 ;;; Code:
-(setq load-path (cons"~/.emacs.d/elisp" load-path))
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
 
-;; well... just install emacs version > 24...
-(when (< emacs-major-version 24)
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(require 'package)
+
+;; Package archives.  gnu + nongnu provide core/built-in-adjacent packages,
+;; melpa provides the bulk of third-party packages.
+(setq package-archives
+      '(("gnu"    . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+        ("melpa"  . "https://melpa.org/packages/")))
+
 (package-initialize)
 
-(unless package-archive-contents (package-refresh-contents))
-;; define function to check if required packages are installed
-(defun ensure-package-installed (&rest packages)
-  (mapcar
-   (lambda (package)
-     (if (package-installed-p package)
-	 nil
-       (if (y-or-n-p (format "Package %s is missing. Install it?" package))
-	   (package-install package)
-	 package)))
-   packages))
+;; Refresh the archive contents the first time (or after a clean wipe).
+(unless package-archive-contents
+  (package-refresh-contents))
 
-(ensure-package-installed 'use-package)
+;; use-package is built in on Emacs 29+; install it as a fallback just in case.
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 (require 'use-package)
 
-(defun load-directory (dir)
-  (let ((load-it (lambda (f)
-		   (load-file (concat (file-name-as-directory dir) f)))
-		 ))
-    (mapc load-it (directory-files dir nil "\\.el$"))))
+;; Every (use-package ...) installs its package unless it says :ensure nil.
+;; Built-in packages (org, python, eglot, claude-code-ide via VC) opt out.
+(setq use-package-always-ensure t)
 
-;; Use different file for Custom.
+;; Pin transient from MELPA so both Emacs 29 and 30 get the modern version
+;; that claude-code-ide and magit need (shadows any older bundled copy).
+(unless (package-installed-p 'transient)
+  (package-install 'transient))
+
+;; Keep Customize's auto-generated settings in their own file, out of the repo.
 (setq custom-file (locate-user-emacs-file "custom.el"))
-
-;; Create custom.el if not exist
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
 (load custom-file)
 
-;; Install Elpaca
-(defvar elpaca-installer-version 0.11)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil :depth 1 :inherit ignore
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (<= emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-                                                  ,@(when-let* ((depth (plist-get order :depth)))
-                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
-                                                  ,(plist-get order :repo) ,repo))))
-                  ((zerop (call-process "git" nil buffer t "checkout"
-                                        (or (plist-get order :ref) "--"))))
-                  (emacs (concat invocation-directory invocation-name))
-                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                  ((require 'elpaca))
-                  ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
+;; Load every .el file in confs/ (non-recursively, alphabetical order).
+(defun load-directory (dir)
+  "Load every .el file directly under DIR, in alphabetical order."
+  (dolist (file (directory-files dir t "\\.el\\'"))
+    (load file)))
 
-;; Install use-package support for elpaca
-(elpaca elpaca-use-package
-  (elpaca-use-package-mode))
-(use-package vterm
-  :ensure t)
-
-;; Reinstall transient from upstream to get the newest version
-(elpaca (transient :host github :repo "magit/transient"))
-
-;; Load configuration files from confs directory
 (load-directory "~/dot-emacs/confs/")
 
 ;;; init.el ends here

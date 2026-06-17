@@ -1,9 +1,14 @@
-;;; my-web.el --- typescript support
+;;; my-web.el --- web-mode (JSX/TSX) support -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; web-mode handles JSX/TSX.  Plain .ts is left to typescript-mode
+;;; (my-typescript.el) so the two no longer fight over `.ts'.
+;;; lsp-mode itself is configured in my-lsp.el.
 ;;; Code:
 
 (use-package web-mode
   :ensure t
-  :mode (("\\.[tj]sx?\\'" . web-mode))
+  :mode ("\\.[jt]sx\\'" . web-mode)
+  :hook (web-mode . lsp-deferred)
   :config
   (setq web-mode-attr-indent-offset nil)
   (setq web-mode-enable-auto-closing t)
@@ -13,13 +18,6 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq indent-tabs-mode nil)
-  )
+  (setq indent-tabs-mode nil))
 
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook (web-mode . lsp-deferred)
-  )
-
-;;; my-web.el ends here~
+;;; my-web.el ends here

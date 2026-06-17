@@ -1,47 +1,30 @@
-;;; my-rust.el --- rust configuration
-;;; Commentary: reference https://keens.github.io/blog/2020/12/01/rustnokankyoukouchiku_emacs_/
-;;; rust configuration --- ...
+;;; my-rust.el --- Rust configuration -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Rust setup.  lsp-mode itself is configured in my-lsp.el; here we only
+;;; enable rust-mode + cargo and attach the `lsp' hook so rust-analyzer
+;;; provides completion and jump-to-definition (M-.).
+;;; reference: https://keens.github.io/blog/2020/12/01/rustnokankyoukouchiku_emacs_/
 
 ;;; Code:
+
 (add-to-list 'exec-path (expand-file-name "~/tools"))
 (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; #rust
-
 (use-package rust-mode
   :ensure t
-  ;; :hook
-  ;; (rust-mode . (lambda ()
-  ;;                (add-hook 'before-save-hook #'rust-format-buffer nil t))))
-  :custom rust-format-on-save t)
-(add-hook 'rust-mode-hook
-          (lambda ()
-            (setq indent-tabs-mode nil)))
+  :hook (rust-mode . lsp)
+  :custom
+  (rust-format-on-save t)
+  :config
+  (add-hook 'rust-mode-hook (lambda () (setq indent-tabs-mode nil))))
 
 (use-package cargo
   :ensure t
   :hook (rust-mode . cargo-minor-mode)
-  ;; :init
-  ;; (bind-keys :map mode-specific-map
-  ;; 	     ("C-c C-p" . cargo-process-clippy))
   :bind (:map rust-mode-map
-	      ("C-c C-c C-p" . cargo-process-clippy))
+              ("C-c C-c C-p" . cargo-process-clippy))
   :config
   (setq cargo-process--command-clippy "clippy")
   (setq cargo-process--command-flags "--color never"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; #lsp
-
-(use-package lsp-mode
-  :init (setq lsp-keymap-prefix "C-c C-l")
-  :ensure t
-  :init (yas-global-mode)
-  :hook (rust-mode . lsp)
-  :bind ("C-c h" . lsp-describe-thing-at-point)
-  :custom (lsp-rust-server 'rust-analyzer))
-(use-package lsp-ui
-  :ensure t)
-
-;; my-rust.el ends here
+;;; my-rust.el ends here

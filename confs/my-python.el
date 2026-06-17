@@ -8,6 +8,7 @@
 ;; LSP: ruff‑lsp via Eglot
 ;; -------------------------------------------------------------
 (use-package eglot
+  :ensure nil  ;; built-in on Emacs 29+; don't pull a duplicate from GNU ELPA
   :defer t
   :hook (python-mode . eglot-ensure)
   :config
@@ -62,6 +63,5 @@
   (python-indent-guess-indent-offset t)
   (python-indent-guess-indent-offset-verbose nil))
 
-(provide 'python-config)
-;;; python-config.el ends here
+;;; my-python.el ends here
 

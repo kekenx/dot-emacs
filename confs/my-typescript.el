@@ -1,16 +1,14 @@
-;;; my-typescript.el --- typescript support
+;;; my-typescript.el --- TypeScript support -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Plain .ts files use typescript-mode.  JSX/TSX files use web-mode
+;;; (see my-web.el).  lsp-mode itself is configured in my-lsp.el.
 ;;; Code:
 
 (use-package typescript-mode
   :ensure t
-  :mode (("\\.ts\\'" . typescript-mode))
+  :mode ("\\.ts\\'" . typescript-mode)
+  :hook (typescript-mode . lsp-deferred)
   :config
   (setq typescript-indent-level 2))
 
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :commands (lsp lsp-deferred)
-;;   :hook (typescript-mode . lsp-deferred)
-;;   )
-
-;;; my-typescript.el ends here~
+;;; my-typescript.el ends here
