@@ -43,6 +43,12 @@
 ;; correct order on a fresh machine.
 (unless (package-installed-p 'compat)
   (package-install 'compat))
+;; Load compat eagerly so its compile-time-only macros (notably `static-when',
+;; which transient uses) are ALSO defined at runtime.  This way transient works
+;; even if it is ever loaded as source instead of a compat-aware .elc.  NOTE:
+;; this requires a recent compat (>= 31, where static-when lives) -- on a box
+;; with an older cached compat, run `package-upgrade'/reinstall compat once.
+(require 'compat)
 (unless (package-installed-p 'transient)
   (package-install 'transient))
 
