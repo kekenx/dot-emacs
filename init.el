@@ -35,6 +35,14 @@
 
 ;; Pin transient from MELPA so both Emacs 29 and 30 get the modern version
 ;; that claude-code-ide and magit need (shadows any older bundled copy).
+;;
+;; transient uses compat's compile-time-only `static-when' macro.  compat must
+;; therefore be installed BEFORE transient, so transient byte-compiles cleanly
+;; (otherwise transient loads as source and errors with
+;; "Invalid function: static-when").  Installing compat first guarantees the
+;; correct order on a fresh machine.
+(unless (package-installed-p 'compat)
+  (package-install 'compat))
 (unless (package-installed-p 'transient)
   (package-install 'transient))
 
