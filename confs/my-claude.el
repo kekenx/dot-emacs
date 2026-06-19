@@ -14,6 +14,15 @@
 (setq vterm-keymap-exceptions
       '("C-c" "C-x" "C-u" "C-g" "C-h" "C-l" "M-x" "M-o" "C-y" "M-y" "C-t"))
 
+;; The Claude CLI (v2.1.89+) defaults to a fullscreen TUI rendered on the
+;; terminal's ALTERNATE screen (like vim/less), which has no scrollback -- so
+;; vterm-copy-mode can only show the current frame, not older messages.  This
+;; env var reverts to the classic renderer that streams to the normal buffer,
+;; restoring vterm scrollback.  Set in Emacs so it applies to the `claude'
+;; subprocess regardless of how Emacs itself was launched (iTerm, tmux+ssh).
+;; See https://code.claude.com/docs/en/fullscreen
+(setenv "CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN" "1")
+
 ;; Install vterm but load it lazily: the first time something calls `vterm'
 ;; (e.g. claude-code-ide opening a terminal) it loads and offers to compile
 ;; its native module once.  Deferring avoids a compile prompt at every startup.
